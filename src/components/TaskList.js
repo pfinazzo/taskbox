@@ -3,8 +3,12 @@
 import React from 'react';
 import Task from './Task';
 import PropTypes from 'prop-types';
+import { view } from "react-easy-state";
+import { TaskStore } from '../stores';
+
 
 function TaskList({ loading, tasks, onPinTask, onArchiveTask }) {
+  console.log('loading => ', loading);
   const events = {
     onPinTask,
     onArchiveTask,
@@ -66,8 +70,14 @@ TaskList.propTypes = {
   onArchiveTask: PropTypes.func.isRequired,
 };
 
-TaskList.defaultProps = {
-  loading: false,
-};
 
-export default TaskList;
+export default view(() => {
+  return (
+    <TaskList
+      loading={TaskStore.loading || false}
+      tasks={TaskStore.tasks || TaskList.tasks}
+      onPinTask={TaskStore.pinTask || TaskList.onPinTask}
+      onArchiveTask={TaskStore.archiveTask || TaskList.onArchiveTask}
+    />
+  )
+})
